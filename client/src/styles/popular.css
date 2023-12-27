@@ -1,0 +1,8 @@
+.popular-book-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgb(187, 0, 0);
+  padding: 6px;
+  font-weight: bold;
+}

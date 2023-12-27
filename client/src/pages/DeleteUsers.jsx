@@ -30,13 +30,17 @@ const DeleteUsers = () => {
 
   return (
     <div className="mt-5">
-      <h2>Delete Users</h2>
+      <h2>Users list</h2>
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>ID</th>
             <th>Username</th>
             <th>Status</th>
+            <th>Full Name</th>
+            <th>University</th>
+            <th>Faculty</th>
+            <th>Course</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -46,6 +50,10 @@ const DeleteUsers = () => {
               <td>{user.id}</td>
               <td>{user.username}</td>
               <td>{user.status}</td>
+              <td>{user.fullName}</td>
+              <td>{user.university}</td>
+              <td>{user.faculty}</td>
+              <td>{user.course}</td>
               <td>
                 <Button variant="danger" onClick={() => handleDelete(user.id)}>
                   Delete

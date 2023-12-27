@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import axios from "axios";
 import AdminModal from "./AdminModal"; // Импортируем компонент
+import "../styles/style.css";
 
 const NavBar = ({ authenticated, setAuthenticated }) => {
   const navigate = useNavigate();
@@ -40,6 +41,9 @@ const NavBar = ({ authenticated, setAuthenticated }) => {
         <Navbar.Brand as={Link} to="/">
           Library
         </Navbar.Brand>
+        <Nav.Link as={Link} to="/libraries" className="mr-2 libraries-link">
+          Libraries
+        </Nav.Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="ml-auto">
@@ -54,6 +58,9 @@ const NavBar = ({ authenticated, setAuthenticated }) => {
                     Admin Panel
                   </Nav.Link>
                 )}
+                <Nav.Link as={Link} to="/personal" className="mr-2">
+                  Personal
+                </Nav.Link>
                 <Button variant="outline-danger" onClick={handleLogout}>
                   Logout
                 </Button>

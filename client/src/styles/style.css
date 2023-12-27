@@ -1,0 +1,119 @@
+/* Books.css */
+
+/* Style the Carousel */
+.custom-carousel {
+  overflow: hidden;
+}
+
+/* Style the Carousel controls (arrows) */
+.custom-carousel .carousel-control-prev,
+.custom-carousel .carousel-control-next {
+  width: 5%; /* Adjust the width of the controls as needed */
+}
+
+/* Style the Carousel control icons */
+.custom-carousel .carousel-control-prev-icon,
+.custom-carousel .carousel-control-next-icon {
+  filter: invert(100%); /* Invert the arrow color to white */
+}
+
+/* Set a fixed width for the cards */
+/* Books.css */
+
+/* ... (previous styles) */
+
+/* Style the Card */
+.custom-carousel .card {
+  width: 300px;
+  margin: 0 auto; /* Center the cards within the Carousel */
+  background-color: #666; /* Set the background color to gray */
+  color: #fff; /* Set text color to white */
+}
+
+/* Style the Card Body */
+.custom-carousel .card-body {
+  padding: 10px; /* Add padding to the card body */
+}
+
+/* Style the Card Title */
+.custom-carousel .card-title {
+  font-size: 18px; /* Increase the font size of the title */
+  margin-bottom: 8px; /* Reduce margin bottom for title */
+}
+
+/* Style the Card Text */
+.custom-carousel .card-text {
+  margin-bottom: 10px; /* Reduce margin bottom for text */
+}
+
+/* Style the Book Now and Delete buttons */
+.custom-carousel .btn-success,
+.custom-carousel .btn-danger,
+.custom-carousel .btn-primary {
+  margin-right: 8px; /* Add right margin to buttons */
+  margin-bottom: 8px; /* Add bottom margin to buttons */
+}
+
+.reservations-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.reservations-table th,
+.reservations-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.reservations-table th {
+  background-color: #f2f2f2;
+}
+
+.reservations-table tr {
+  border-bottom: 1px solid #ddd;
+}
+
+.reservations-table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+.reservations-table th,
+.reservations-table td {
+  border-radius: 8px;
+}
+.personal-card {
+  width: 300px; /* Задайте ширину карточки по вашему усмотрению */
+  margin: auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень карточки */
+}
+
+.personal-title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.mb-2 {
+  margin-bottom: 10px;
+}
+
+.personal-text {
+  margin-bottom: 5px;
+}
+
+.personal-input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.personal-button {
+  margin-top: 10px;
+}
+
+.libraries-link {
+  color: white !important; /* !important используется для принудительного применения стиля */
+}

@@ -12,17 +12,41 @@ const AdminModal = ({ show, handleClose }) => {
         <Button
           variant="primary"
           as={Link}
+          to="/library/add"
+          onClick={handleClose}
+          className="mb-2">
+          Add Library
+        </Button>
+        <Button
+          variant="primary"
+          as={Link}
           to="/add"
           onClick={handleClose}
           className="mb-2">
           Add Book
         </Button>
         <Button
+          variant="primary"
+          as={Link}
+          to="/authors/add"
+          onClick={handleClose}
+          className="mb-2">
+          Add Author
+        </Button>
+        <Button
           variant="danger"
           as={Link}
           to="/delete-users"
+          onClick={handleClose}
+          className="mb-2">
+          Users List
+        </Button>
+        <Button
+          variant="danger"
+          as={Link}
+          to="/reservations"
           onClick={handleClose}>
-          Delete User
+          Reservations List
         </Button>
       </Modal.Body>
     </Modal>
