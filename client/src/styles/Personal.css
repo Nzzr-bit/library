@@ -1,0 +1,49 @@
+/* Personal.css */
+
+.personal-card {
+  width: 600px;
+  height: 600px;
+  padding: 20px;
+  font-size: 18px;
+}
+
+.personal-title {
+  font-size: 24px;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.personal-text {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.personal-input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 5px;
+  font-size: 18px;
+}
+
+.personal-button {
+  width: 100%;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.reserved-books-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.reserved-books-table th,
+.reserved-books-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.reserved-books-table th {
+  background-color: #f2f2f2;
+}

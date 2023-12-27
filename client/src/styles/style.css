@@ -117,3 +117,7 @@
 .libraries-link {
   color: white !important; /* !important используется для принудительного применения стиля */
 }
+
+.sort {
+  padding: 10px 10px;
+}

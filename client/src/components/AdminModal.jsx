@@ -44,6 +44,14 @@ const AdminModal = ({ show, handleClose }) => {
         <Button
           variant="danger"
           as={Link}
+          to="/authors-list"
+          onClick={handleClose}
+          className="mb-2">
+          Authors List
+        </Button>
+        <Button
+          variant="danger"
+          as={Link}
           to="/reservations"
           onClick={handleClose}>
           Reservations List

@@ -13,6 +13,7 @@ import axios from "axios";
 import Reservations from "./pages/Reservations";
 import Libraries from "./pages/Libraries";
 import AddLibrary from "./pages/AddLibrary";
+import AuthorList from "./pages/AuthorsList";
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -45,6 +46,7 @@ function App() {
               <Route path="/reservations" element={<Reservations />} />
               <Route path="/libraries" element={<Libraries />} />
               <Route path="/library/add" element={<AddLibrary />} />
+              <Route path="/authors-list" element={<AuthorList />} />
               {/* Добавьте другие защищенные маршруты здесь */}
             </>
           ) : (

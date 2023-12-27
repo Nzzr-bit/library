@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Card from "react-bootstrap/Card";
-import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import "../styles/style.css";
+import "../styles/Personal.css"; // Создайте файл Personal.css для стилей
 
 const Personal = () => {
   const [userData, setUserData] = useState({});
@@ -153,7 +153,7 @@ const Personal = () => {
       <Card.Text className="personal-text">
         <strong>Reserved Books:</strong>
         {reservedBooks.length > 0 ? (
-          <table>
+          <table className="reserved-books-table">
             <thead>
               <tr>
                 <th>Title</th>

@@ -109,8 +109,109 @@ app.post("/authors/add", (req, res) => {
   });
 });
 
+app.delete("/authors/:name", async (req, res) => {
+  const authorName = req.params.name;
+
+  try {
+    // Check if the author exists
+    const authorExistenceQuery = "SELECT * FROM authors WHERE `a_name` = ?";
+    const [authorExistenceRows] = await db
+      .promise()
+      .query(authorExistenceQuery, [authorName]);
+
+    if (authorExistenceRows.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Author not found" });
+    }
+
+    // Delete books associated with the author
+    const deleteBooksQuery = "DELETE FROM books WHERE `a_name` = ?";
+    await db.promise().query(deleteBooksQuery, [authorName]);
+
+    // Delete the author
+    const deleteAuthorQuery = "DELETE FROM authors WHERE `a_name` = ?";
+    const [deleteAuthorRows] = await db
+      .promise()
+      .query(deleteAuthorQuery, [authorName]);
+
+    if (deleteAuthorRows.affectedRows > 0) {
+      return res.json({
+        success: true,
+        message: "Author and associated books deleted successfully",
+      });
+    } else {
+      return res
+        .status(500)
+        .json({ success: false, message: "Failed to delete author" });
+    }
+  } catch (error) {
+    console.error("Error deleting author:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+});
+
 app.get("/users", (req, res) => {
-  const q = "SELECT * FROM users";
+  let q = "SELECT * FROM users";
+
+  // Apply sorting if university is provided
+  if (req.query.university) {
+    q += ` WHERE university = '${req.query.university}'`;
+  }
+
+  // Apply sorting if faculty is provided
+  if (req.query.faculty) {
+    q += `${req.query.university ? " AND" : " WHERE"} faculty = '${
+      req.query.faculty
+    }'`;
+  }
+
+  // Apply sorting if course is provided
+  if (req.query.course) {
+    q += `${
+      req.query.university || req.query.faculty ? " AND" : " WHERE"
+    } course = '${req.query.course}'`;
+  }
+
+  q += " ORDER BY university, faculty, course"; // Sorting by university, faculty, and course
+
+  db.query(q, (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+    return res.json(data);
+  });
+});
+
+app.get("/users/university", (req, res) => {
+  const q = "SELECT DISTINCT university FROM users";
+  db.query(q, (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+    return res.json(data);
+  });
+});
+
+// Route to get distinct faculties
+app.get("/users/faculty", (req, res) => {
+  const q = "SELECT DISTINCT faculty FROM users";
+  db.query(q, (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+    return res.json(data);
+  });
+});
+
+// Route to get distinct courses
+app.get("/users/course", (req, res) => {
+  const q = "SELECT DISTINCT course FROM users";
   db.query(q, (err, data) => {
     if (err) {
       console.log(err);
@@ -125,6 +226,15 @@ app.delete("/users/:id", (req, res) => {
   const q = "DELETE FROM users WHERE id = ?";
 
   db.query(q, [userId], (err, data) => {
+    if (err) return res.status(500).send(err);
+    return res.json(data);
+  });
+});
+app.delete("/books/:id", (req, res) => {
+  const bookId = req.params.id;
+  const q = "DELETE FROM books WHERE id = ?";
+
+  db.query(q, [bookId], (err, data) => {
     if (err) return res.status(500).send(err);
     return res.json(data);
   });
@@ -169,20 +279,45 @@ app.post("/books/book-now/:id", async (req, res) => {
   const bookId = req.params.id;
   const username = req.body.username;
 
-  const q = "INSERT INTO reservations (username, book_id) VALUES (?, ?)";
+  const selectQ = "SELECT * FROM books WHERE id = ?";
+  const updateReservationQ =
+    "INSERT INTO reservations (username, book_id) VALUES (?, ?)";
+  const updateBookQ =
+    "UPDATE books SET quantity = quantity - 1, popular = popular + 1 WHERE id = ?";
 
   try {
+    // Check if the book exists
+    const bookData = await new Promise((resolve, reject) => {
+      db.query(selectQ, [bookId], (err, data) => {
+        if (err) reject(err);
+        else resolve(data);
+      });
+    });
+
+    if (bookData.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Book not found" });
+    }
+
+    // Check if the book is available
+    if (bookData[0].quantity <= 0) {
+      return res.json({
+        success: false,
+        message: "Failed to reserve the book. It is out of stock.",
+      });
+    }
+
     const result = await new Promise((resolve, reject) => {
-      db.query(q, [username, bookId], (err, data) => {
+      db.query(updateReservationQ, [username, bookId], (err, data) => {
         if (err) reject(err);
         else resolve(data);
       });
     });
 
     if (result.affectedRows > 0) {
-      const updateQ = "UPDATE books SET quantity = quantity - 1 WHERE id = ?";
       await new Promise((resolve, reject) => {
-        db.query(updateQ, [bookId], (err, data) => {
+        db.query(updateBookQ, [bookId], (err, data) => {
           if (err) reject(err);
           else resolve(data);
         });
@@ -213,10 +348,44 @@ app.get("/books/reserved/:username", (req, res) => {
     return res.json(data);
   });
 });
+app.get("/books/reserved/:username/:bookId", async (req, res) => {
+  const { username, bookId } = req.params;
+  const q = "SELECT * FROM reservations WHERE `username` = ? AND `book_id` = ?";
+
+  db.query(q, [username, bookId], (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+    return res.json(data.length > 0);
+  });
+});
+
+app.get("/books/most-popular", (req, res) => {
+  const q = "SELECT * FROM books ORDER BY popular DESC LIMIT 1";
+
+  db.query(q, (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+    return res.json(data[0]);
+  });
+});
 
 app.get("/reservations", (req, res) => {
-  const q =
-    "SELECT r.id, u.fullName, u.university, u.faculty, b.title, b.a_name, r.reservation_date FROM reservations r JOIN users u ON r.username = u.username JOIN books b ON r.book_id = b.id";
+  const { sort, order } = req.query;
+  const sortOptions = ["university", "faculty", "reservation_date"];
+
+  if (!sortOptions.includes(sort) || !["asc", "desc"].includes(order)) {
+    return res.status(400).json({ error: "Invalid sort option or order" });
+  }
+
+  const q = `SELECT r.id, u.fullName, u.university, u.faculty, b.title, b.a_name, r.reservation_date 
+             FROM reservations r 
+             JOIN users u ON r.username = u.username 
+             JOIN books b ON r.book_id = b.id
+             ORDER BY ${sort} ${order}`;
 
   db.query(q, (err, data) => {
     if (err) {

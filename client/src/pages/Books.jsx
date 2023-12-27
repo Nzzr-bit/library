@@ -1,3 +1,4 @@
+// Books.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -79,6 +80,19 @@ const Books = () => {
       }
 
       const [username, status] = token.split("_");
+
+      // Check if the user has already reserved the book
+      const userReservedBooksResponse = await axios.get(
+        `http://localhost:8800/books/reserved/${username}`
+      );
+      const userReservedBooksIds = userReservedBooksResponse.data.map(
+        (book) => book.book_id
+      );
+
+      if (userReservedBooksIds.includes(id)) {
+        alert("You have already reserved this book.");
+        return;
+      }
 
       const response = await axios.post(
         `http://localhost:8800/books/book-now/${id}`,
